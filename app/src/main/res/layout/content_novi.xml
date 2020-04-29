@@ -8,22 +8,10 @@
     tools:context=".NoviActivity"
     tools:showIn="@layout/activity_novi">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:text="Novi Activity"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/textView"
-        android:id="@+id/counterTextView"
-
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
