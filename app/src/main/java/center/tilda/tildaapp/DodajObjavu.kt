@@ -8,9 +8,23 @@ import kotlinx.android.synthetic.main.activity_dodaj_objavu.*
 
 class DodajObjavu : AppCompatActivity() {
 
+    private var kreiramoNovuObjavu = true
+    private var indexObjaveKojuMenjamo : Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dodaj_objavu)
+
+        this.indexObjaveKojuMenjamo = this.intent.getIntExtra("position", -1)
+
+        if (this.indexObjaveKojuMenjamo > -1){ //menjamo postojeću objavu
+            this.kreiramoNovuObjavu = false
+            dodajObjavuButton.text = "Promeni objavu"
+            naslovEditText.setText(Database.listaObjava[this.indexObjaveKojuMenjamo].naslov) //Uzimamo naslov objave koju menjamo i postavljamo je kao početnu vrednost
+            sadrzajEditText.setText(Database.listaObjava[this.indexObjaveKojuMenjamo].sadrzaj) //Uzimamo sadržaj objave koju menjamo i postavljamo je kao početnu vrednost
+        }
+        else{ //kreiramo novu objavu
+        }
     }
 
     fun dodajObjavu(view: View){
@@ -22,10 +36,18 @@ class DodajObjavu : AppCompatActivity() {
             return
         }
 
-        val novaObjava = Objava(naslov, sadrzaj)
-        Database.add(novaObjava)
+        // Ukoliko kreiramo novu objavu, dodajemo je na kraj postojeće liste
+        // U protivnom, menjamo naslov i sadržaj postojeće objave
+        if (this.kreiramoNovuObjavu) {
+            val novaObjava = Objava(naslov, sadrzaj)
+            Database.add(novaObjava)
+        }
+        else {
+            Database.listaObjava[indexObjaveKojuMenjamo].naslov = naslov
+            Database.listaObjava[indexObjaveKojuMenjamo].sadrzaj = sadrzaj
+        }
         this.setResult(0)
-        this.finish()
+        this.finish() // Sklanjamo activity sa ekrana
     }
 
     override fun onBackPressed() {

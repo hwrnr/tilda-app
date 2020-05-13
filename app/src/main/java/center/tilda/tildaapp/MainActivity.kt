@@ -9,6 +9,8 @@ import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
 
+
+//Ovaj activity se trenutno ne koristi
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -46,7 +46,7 @@ class NoviActivity : AppCompatActivity() {
         Database.add(Objava("Naslov 13", "Tekst objave"))
         Database.add(Objava("Naslov 14", "Tekst objave"))
 
-        viewAdapter = ObjavaAdapter(Database.listaObjava)
+        viewAdapter = ObjavaAdapter(Database.listaObjava, this)
 
         viewManager = LinearLayoutManager(this)
 
@@ -61,7 +61,7 @@ class NoviActivity : AppCompatActivity() {
 
     override fun onResume(){
         super.onResume()
-        //viewAdapter.notifyDataSetChanged()
+        viewAdapter.notifyDataSetChanged()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

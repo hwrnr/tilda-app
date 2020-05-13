@@ -23,4 +23,14 @@
         android:id="@+id/sadrzajTextView"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableStart="@android:drawable/ic_delete"
+        android:layout_gravity="end"
+        android:text="Obriši"
+        android:id="@+id/obrisiButton"
+        />
+
 </LinearLayout>
