@@ -38,7 +38,7 @@ class ObjavaAdapter (private val myDataset: ArrayList<Objava>, private val conte
 
         //Postavljamo funkciju koja će se izvršiti kada kliknemo na activity
         holder.root.setOnClickListener {
-            //Prosleđujemo context, a ne this, da bi ,,prevarili'' sistem o tome koje pozvao DodajObjavu activity
+            //Prosleđujemo context, a ne this, da bi ,,prevarili'' sistem o tome ko je pozvao DodajObjavu activity
             val intent = Intent(context, DodajObjavu::class.java)
             intent.putExtra("position", position)
             context.startActivity(intent)
