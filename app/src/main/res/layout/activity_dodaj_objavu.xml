@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/dodajObjavuRoot"
+    app:layout_scrollFlags="scroll"
     tools:context=".DodajObjavu">
 
     <EditText
+        android:id="@+id/naslovEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/naslovEditText"
         android:hint="Naslov objave"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:id="@+id/sadrzajEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/sadrzajEditText"
         android:hint="Sadržaj objave"
-        />
+        app:layout_constraintTop_toBottomOf="@id/naslovEditText" />
 
     <Button
+        android:id="@+id/dodajObjavuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dodaj objavu"
-        android:id="@+id/dodajObjavuButton"
         android:onClick="dodajObjavu"
-        />
+        android:text="Dodaj objavu"
+        app:layout_constraintTop_toBottomOf="@id/sadrzajEditText" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

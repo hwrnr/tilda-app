@@ -31,7 +31,7 @@ class NoviActivity : AppCompatActivity() {
             startActivityForResult(intent, dodajActivityRequestCode)
         }
 
-        Database.add(Objava("Naslov 1", "Tekst objave"))
+        Database.add(Objava("Naslov 1 Naslov 1 Naslov 1 Naslov 1 Naslov 1 Naslov 1", "Tekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objave"))
         Database.add(Objava("Naslov 2", "Tekst objave"))
         Database.add(Objava("Naslov 3", "Tekst objave"))
         Database.add(Objava("Naslov 4", "Tekst objave"))

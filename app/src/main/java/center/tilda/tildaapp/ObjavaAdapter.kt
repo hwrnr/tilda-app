@@ -3,23 +3,23 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.objava_content.view.*
 
 //context predstavlja activity unutar kog se nalazi ovaj adapter
 class ObjavaAdapter (private val myDataset: ArrayList<Objava>, private val context: Context) : RecyclerView.Adapter<ObjavaAdapter.MyViewHolder>() {
 
-    class MyViewHolder(val root: LinearLayout) : RecyclerView.ViewHolder(root)
+    class MyViewHolder(val root: ConstraintLayout) : RecyclerView.ViewHolder(root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val linearLayout = LayoutInflater.from(parent.context).inflate(
+        val layout = LayoutInflater.from(parent.context).inflate(
             R.layout.objava_content,
             parent,
             false
-        ) as LinearLayout
+        ) as ConstraintLayout //Koristimo ConstraintLayout umesto LinearLayout, zbog veće fleksibilnosti
 
-        return MyViewHolder(linearLayout)
+        return MyViewHolder(layout)
     }
 
     override fun getItemCount(): Int {
@@ -28,7 +28,14 @@ class ObjavaAdapter (private val myDataset: ArrayList<Objava>, private val conte
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.root.naslovTextView.text = myDataset[position].naslov
-        holder.root.sadrzajTextView.text = myDataset[position].sadrzaj
+
+        var sadrzaj = myDataset[position].sadrzaj
+
+        //Ne popunjavamo ceo sadržaj pošto je prikazan samo deo na početnom ekranu
+        if (sadrzaj.length > 500){
+            sadrzaj = sadrzaj.dropLast(sadrzaj.length - 500)
+        }
+        holder.root.sadrzajTextView.text = sadrzaj
 
         //Postavljamo funkciju koja će se izvršiti prilikom klika na dugme Obriši
         holder.root.obrisiButton.setOnClickListener {
@@ -37,9 +44,16 @@ class ObjavaAdapter (private val myDataset: ArrayList<Objava>, private val conte
         }
 
         //Postavljamo funkciju koja će se izvršiti kada kliknemo na activity
-        holder.root.setOnClickListener {
+        holder.root.izmeniButton.setOnClickListener {
             //Prosleđujemo context, a ne this, da bi ,,prevarili'' sistem o tome ko je pozvao DodajObjavu activity
             val intent = Intent(context, DodajObjavu::class.java)
+            intent.putExtra("position", position)
+            context.startActivity(intent)
+        }
+
+        holder.root.setOnClickListener {
+            //Prosleđujemo context, a ne this, da bi ,,prevarili'' sistem o tome ko je pozvao DodajObjavu activity
+            val intent = Intent(context, PregledajObjavu::class.java)
             intent.putExtra("position", position)
             context.startActivity(intent)
         }
