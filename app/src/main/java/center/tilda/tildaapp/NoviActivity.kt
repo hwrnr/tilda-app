@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 import kotlinx.android.synthetic.main.activity_novi.fab
 import kotlinx.android.synthetic.main.activity_novi.toolbar
@@ -31,21 +32,6 @@ class NoviActivity : AppCompatActivity() {
             startActivityForResult(intent, dodajActivityRequestCode)
         }
 
-        Database.add(Objava("Naslov 1 Naslov 1 Naslov 1 Naslov 1 Naslov 1 Naslov 1", "Tekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objaveTekst objave"))
-        Database.add(Objava("Naslov 2", "Tekst objave"))
-        Database.add(Objava("Naslov 3", "Tekst objave"))
-        Database.add(Objava("Naslov 4", "Tekst objave"))
-        Database.add(Objava("Naslov 5", "Tekst objave"))
-        Database.add(Objava("Naslov 6", "Tekst objave"))
-        Database.add(Objava("Naslov 7", "Tekst objave"))
-        Database.add(Objava("Naslov 8", "Tekst objave"))
-        Database.add(Objava("Naslov 9", "Tekst objave"))
-        Database.add(Objava("Naslov 10", "Tekst objave"))
-        Database.add(Objava("Naslov 11", "Tekst objave"))
-        Database.add(Objava("Naslov 12", "Tekst objave"))
-        Database.add(Objava("Naslov 13", "Tekst objave"))
-        Database.add(Objava("Naslov 14", "Tekst objave"))
-
         viewAdapter = ObjavaAdapter(Database.listaObjava, this)
 
         viewManager = LinearLayoutManager(this)
@@ -57,11 +43,39 @@ class NoviActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
+        Server.setContext(this.applicationContext)
+
+        swipeRefreshLayout.isRefreshing = true
+        this.refreshBlogs()
+
+        swipeRefreshLayout.setOnRefreshListener {
+            this.refreshBlogs()
+        }
     }
 
     override fun onResume(){
         super.onResume()
         viewAdapter.notifyDataSetChanged()
+    }
+
+    fun refreshBlogs(){
+        Server.getBlogs { isOk, response ->
+            if (!isOk) {
+                Snackbar.make(recyclerView, "Error connecting to server", Snackbar.LENGTH_LONG).show()
+                swipeRefreshLayout.isRefreshing = false
+                return@getBlogs
+            }
+            Database.listaObjava.clear()
+            val data = response!!.getJSONArray("data")
+            //for (i = 0; i < data.length(); ++i)
+            for (i in 0 until data.length()){
+                val jsonObjave = data.getJSONObject(i)
+                val objava = Objava(jsonObjave.getString("title"), jsonObjave.getString("content"))
+                Database.add(objava)
+            }
+            viewAdapter.notifyDataSetChanged()
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
