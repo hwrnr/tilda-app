@@ -10,6 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.activity_novi.fab
 import kotlinx.android.synthetic.main.activity_novi.toolbar
 import kotlinx.android.synthetic.main.content_novi.*
+import org.json.JSONObject
 
 class NoviActivity : AppCompatActivity() {
 
