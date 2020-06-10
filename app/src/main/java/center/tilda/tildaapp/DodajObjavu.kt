@@ -39,15 +39,38 @@ class DodajObjavu : AppCompatActivity() {
         // Ukoliko kreiramo novu objavu, dodajemo je na kraj postojeće liste
         // U protivnom, menjamo naslov i sadržaj postojeće objave
         if (this.kreiramoNovuObjavu) {
-            val novaObjava = Objava(naslov, sadrzaj)
-            Database.add(novaObjava)
+
+            Server.createBlog(naslov, sadrzaj){ isOk, response ->
+                if (isOk && response != null){
+                    val novaObjava = Objava(response.getString("title"), response.getString("content"), response.getString("slug"))
+                    Database.add(novaObjava)
+                    this@DodajObjavu.setResult(0)
+                    this@DodajObjavu.finish() // Sklanjamo activity sa ekrana
+                }
+                else {
+                    Snackbar.make(dodajObjavuRoot, "Došlo je do greške prilikom kreiranja objave", Snackbar.LENGTH_LONG).show()
+                }
+            }
         }
         else {
-            Database.listaObjava[indexObjaveKojuMenjamo].naslov = naslov
-            Database.listaObjava[indexObjaveKojuMenjamo].sadrzaj = sadrzaj
+            val objava = Database.listaObjava[indexObjaveKojuMenjamo]
+            Server.editBlog(naslov, sadrzaj, objava.slug) { isOk, response ->
+                if (isOk){
+                    objava.naslov = response!!.getString("title")
+                    //objava.naslov = naslov
+                    objava.naslov = response!!.getString("content")
+                    //objava.sadrzaj = sadrzaj
+                    objava.slug = response!!.getString("slug")
+                    this.setResult(0)
+                    this.finish() // Sklanjamo activity sa ekrana
+                }
+                else {
+                    Snackbar.make(dodajObjavuRoot, "Došlo je do greške prilikom menjanja objave", Snackbar.LENGTH_LONG).show()
+                }
+            }
         }
-        this.setResult(0)
-        this.finish() // Sklanjamo activity sa ekrana
+        //this.setResult(0)
+        //this.finish() // Sklanjamo activity sa ekrana
     }
 
     override fun onBackPressed() {

@@ -1,6 +1,6 @@
 package center.tilda.tildaapp
 
-class Objava (public  var naslov: String, public var sadrzaj: String){
+class Objava (public  var naslov: String, public var sadrzaj: String, var slug: String = ""){
 
 }
 

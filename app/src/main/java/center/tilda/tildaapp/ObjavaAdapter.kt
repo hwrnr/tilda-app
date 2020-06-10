@@ -39,8 +39,13 @@ class ObjavaAdapter (private val myDataset: ArrayList<Objava>, private val conte
 
         //Postavljamo funkciju koja će se izvršiti prilikom klika na dugme Obriši
         holder.root.obrisiButton.setOnClickListener {
-            myDataset.removeAt(position)
-            this.notifyDataSetChanged()
+            val objava = myDataset[position]
+            Server.deleteBlog(objava.slug){isOk ->
+                if (isOk){
+                    myDataset.removeAt(position)
+                    this.notifyDataSetChanged()
+                }
+            }
         }
 
         //Postavljamo funkciju koja će se izvršiti kada kliknemo na activity

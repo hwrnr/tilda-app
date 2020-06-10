@@ -14,6 +14,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        usernameEditText.setText("admin@example.com")
+        passwordEditText.setText("Sekrit")
     }
 
     fun loginToServer(view: View) {

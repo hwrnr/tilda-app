@@ -201,7 +201,94 @@ object Server {
         this.requestQueue.add(jsonObjectRequest)
     }
 
+    public fun deleteBlog(slug: String, callback: (Boolean) -> Unit){
+        this.refreshIfNeeded()
 
+        val url = "$host/api/v0/blogs/$slug"
+        val jsonRequest = logedInRequest(url, Request.Method.DELETE, null,
+            Response.Listener {
+                callback(true)
+            },
+            Response.ErrorListener {
+                callback(false)
+            }
+            )
+        this.requestQueue.add(jsonRequest)
+    }
+
+    public fun createBlog(title: String, content: String, callback: (Boolean, JSONObject?) -> Unit){
+        this.refreshIfNeeded()
+        val url = "$host/api/v0/blogs"
+
+        val params = HashMap<String, Any>()
+        params["title"] = title
+        params["content"] = content
+        params["published"] = true
+        params["image"] = "https://tilda.center/static/images/logo.png"
+
+        val jsonData = JSONObject(params as HashMap<*, *>)
+        val jsonRequest = logedInRequest(url, Request.Method.POST, jsonData,
+            Response.Listener { response ->
+                callback(true, response)
+            },
+            Response.ErrorListener {
+                callback(false, null)
+            }
+            )
+
+        this.requestQueue.add(jsonRequest)
+    }
+
+    public fun editBlog(title: String, content: String, slug: String, callback: (Boolean, JSONObject?) -> Unit){
+        this.refreshIfNeeded()
+        val url = "$host/api/v0/blogs/$slug"
+
+        val params = HashMap<String, Any>()
+        params["title"] = title
+        params["content"] = content
+        params["published"] = true
+        params["image"] = "https://tilda.center/static/images/logo.png"
+
+        val jsonData = JSONObject(params as HashMap<*, *>)
+        val jsonRequest = logedInRequest(url, Request.Method.PATCH, jsonData,
+            Response.Listener { response ->
+                callback(true, response)
+            },
+            Response.ErrorListener {
+                callback(false, null)
+            }
+        )
+
+        this.requestQueue.add(jsonRequest)
+    }
+
+    private fun logedInRequest(url: String, method: Int, data: JSONObject?, responseListener: Response.Listener<JSONObject>, errorListener: Response.ErrorListener) : JsonObjectRequest {
+        val jsonObjectRequest = object: JsonObjectRequest(method, url, data,
+            responseListener,
+            errorListener
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                //val params = super.getHeaders() as MutableMap<String, String>
+                val params = HashMap<String, String>()
+                try {
+                    params["Cookie"] = "access_token_cookie=" + this@Server.ACCESS_TOKEN_COOKIE +
+                            "; csrf_access_token=" + this@Server.CSRF_ACCESS_TOKEN +
+                            "; csrf_refresh_token=" + this@Server.CSRF_REFRESH_TOKEN
+
+                    params["X-CSRF-TOKEN"] = this@Server.CSRF_ACCESS_TOKEN!!
+                    Log.i("Cookie", params["Cookie"]!!)
+                }catch (ignored: Exception){
+                    Log.i("Cookie", "Ovde je greska " + ignored.javaClass)
+                    Log.i("Cookie", this@Server.ACCESS_TOKEN_COOKIE!!)
+                    Log.i("Cookie", this@Server.CSRF_ACCESS_TOKEN!!)
+                    Log.i("Cookie", this@Server.CSRF_REFRESH_TOKEN!!)
+                }
+                return params
+            }
+
+        }
+        return jsonObjectRequest
+    }
 }
 
 class ServerException(message: String?) : Exception(message) {
