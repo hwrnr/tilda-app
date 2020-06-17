@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.objava_content.view.*
 
 //context predstavlja activity unutar kog se nalazi ovaj adapter
@@ -36,6 +37,13 @@ class ObjavaAdapter (private val myDataset: ArrayList<Objava>, private val conte
             sadrzaj = sadrzaj.dropLast(sadrzaj.length - 500)
         }
         holder.root.sadrzajTextView.text = sadrzaj
+
+        Picasso.get()
+            .load(myDataset[position].imageLink)
+            .placeholder(R.drawable.ic_image_loading)
+            .error(R.drawable.ic_image_loading_error)
+            .centerInside()
+            .into(holder.root.slikaObjaveImageview)
 
         //Postavljamo funkciju koja će se izvršiti prilikom klika na dugme Obriši
         holder.root.obrisiButton.setOnClickListener {

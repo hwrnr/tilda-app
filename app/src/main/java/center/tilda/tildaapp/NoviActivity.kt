@@ -71,7 +71,7 @@ class NoviActivity : AppCompatActivity() {
             //for (i = 0; i < data.length(); ++i)
             for (i in 0 until data.length()){
                 val jsonObjave = data.getJSONObject(i)
-                val objava = Objava(jsonObjave.getString("title"), jsonObjave.getString("content"), jsonObjave.getString("slug"))
+                val objava = Objava(jsonObjave.getString("title"), jsonObjave.getString("content"), jsonObjave.getString("slug"), jsonObjave.getString("image"))
                 Database.add(objava)
             }
             viewAdapter.notifyDataSetChanged()
